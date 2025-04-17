@@ -1,8 +1,17 @@
-import { useContext } from "react";
-import { UserContext } from "../App.tsx";
+import { useOurUserStore } from "../App.tsx";
 
 export const Age = () => {
-  const user = useContext(UserContext);
+  const { user, increaseAge } = useOurUserStore((state) => state);
 
-  return <div>age: {user.age}</div>;
+  const handleGettingOld = () => {
+    console.log("getting old clicked");
+    increaseAge();
+  };
+
+  return (
+    <div>
+      <p>age: {user.age}</p>
+      <button onClick={handleGettingOld}>get old</button>
+    </div>
+  );
 };

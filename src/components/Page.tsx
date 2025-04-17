@@ -1,8 +1,7 @@
-import { useContext } from "react";
-import { UserContext } from "../App.tsx";
+import { useOurUserStore } from "../App.tsx";
 
 export const Page = () => {
-  const user = useContext(UserContext);
+  const user = useOurUserStore((state) => state.user);
   return (
     <div>
       <h2>Page view</h2>
