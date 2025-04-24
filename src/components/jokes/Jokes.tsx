@@ -1,4 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
+import {
+  jokeCardStyle,
+  jokeTypeStyle,
+  jokeSetupStyle,
+  jokePunchlineStyle,
+  showButtonStyle,
+  saveButtonStyle,
+  removeButtonStyle,
+  refreshButtonStyle,
+  jokesContainerStyle,
+} from "./styles";
 
 const apiUrl = "https://official-joke-api.appspot.com/random_ten";
 
@@ -55,7 +66,7 @@ export const Jokes = ({ view = "new_jokes" }: JokesProps) => {
 
   return (
     <>
-      <div>
+      <div style={jokesContainerStyle}>
         {jokes
           .filter((j) => {
             if (view === "library") {
@@ -66,33 +77,43 @@ export const Jokes = ({ view = "new_jokes" }: JokesProps) => {
           })
           // .filter((joke) => view === "library" ? !!joke.inLibrary : !joke.inLibrary)
           .map((joke) => (
-            <div
-              style={{ border: "1px solid red", marginBottom: "10px" }}
-              key={joke.id}
-            >
-              <p>{joke.type}</p>
-              <p>{joke.setup}</p>
+            <div style={jokeCardStyle} key={joke.id}>
+              <p style={jokeTypeStyle}>{joke.type}</p>
+              <p style={jokeSetupStyle}>{joke.setup}</p>
               {joke.showPunchline ? (
-                <p>{joke.punchline}</p>
+                <p style={jokePunchlineStyle}>{joke.punchline}</p>
               ) : (
-                <button onClick={() => handleShowPunchline(joke.id)}>
-                  Show
+                <button
+                  onClick={() => handleShowPunchline(joke.id)}
+                  style={showButtonStyle}
+                >
+                  Show Punchline
                 </button>
               )}
               {joke.inLibrary ? (
-                <button onClick={() => handleSaveRemoveLibrary(joke.id)}>
-                  remove it from library
+                <button
+                  onClick={() => handleSaveRemoveLibrary(joke.id)}
+                  style={removeButtonStyle}
+                >
+                  Remove from library
                 </button>
               ) : (
-                <button onClick={() => handleSaveRemoveLibrary(joke.id)}>
-                  save it in library
+                <button
+                  onClick={() => handleSaveRemoveLibrary(joke.id)}
+                  style={saveButtonStyle}
+                >
+                  Save to library
                 </button>
               )}
             </div>
           ))}
       </div>
 
-      {view === "new_jokes" && <button onClick={fetchJokes}>refresh</button>}
+      {view === "new_jokes" && (
+        <button onClick={fetchJokes} style={refreshButtonStyle}>
+          Refresh Jokes
+        </button>
+      )}
     </>
   );
 };
