@@ -12,7 +12,7 @@ export const jokeCardStyle = {
 export const jokeTypeStyle = {
   color: "#666",
   fontSize: "14px",
-  textTransform: "capitalize",
+  textTransform: "capitalize" as const,
   margin: "0 0 8px 0"
 };
 
@@ -74,5 +74,27 @@ export const refreshButtonStyle = {
 };
 
 export const jokesContainerStyle = {
+  color: '#333'
+};
+
+export const emptyLibraryContainerStyle = {
+  textAlign: 'center' as const, 
+  padding: '30px', 
+  backgroundColor: '#f5f0e0', 
+  borderRadius: '8px',
+  margin: '20px',
+  boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
+  color: '#333'
+};
+
+export const emptyLibraryTitleStyle = {
+  fontSize: '22px',
+  margin: '0 0 16px 0',
+  color: '#222'
+};
+
+export const emptyLibraryTextStyle = {
+  fontSize: '16px',
+  margin: '0 0 12px 0',
   color: '#333'
 }; 
