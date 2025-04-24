@@ -1,10 +1,10 @@
 import "./App.css";
-import { Jokes } from "./components/Jokes.tsx";
+import { Router } from "./Router";
 
 function App() {
   return (
     <>
-      <Jokes />
+      <Router />
     </>
   );
 }

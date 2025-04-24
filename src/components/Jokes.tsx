@@ -10,10 +10,13 @@ type Joke = {
   showPunchline?: boolean;
 };
 
-export const Jokes = () => {
+type JokesProps = {
+  view?: "new_jokes" | "library";
+};
+
+export const Jokes = ({ view = "new_jokes" }: JokesProps) => {
   const [jokes, setJokes] = useState<Joke[]>([]);
   const [savedJokes, setSavedJokes] = useState<Joke[]>([]);
-  const [view, setView] = useState<"new_jokes" | "library">("new_jokes");
 
   const fetchJokes = useCallback(async () => {
     fetch(apiUrl)
