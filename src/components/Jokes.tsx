@@ -8,6 +8,7 @@ type Joke = {
   setup: string;
   type: string;
   showPunchline?: boolean;
+  inLibrary?: boolean;
 };
 
 type JokesProps = {
@@ -16,7 +17,6 @@ type JokesProps = {
 
 export const Jokes = ({ view = "new_jokes" }: JokesProps) => {
   const [jokes, setJokes] = useState<Joke[]>([]);
-  const [savedJokes, setSavedJokes] = useState<Joke[]>([]);
 
   const fetchJokes = useCallback(async () => {
     fetch(apiUrl)
@@ -31,7 +31,7 @@ export const Jokes = ({ view = "new_jokes" }: JokesProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function handleShowPunchline(jokeId: number): void {
+  const handleShowPunchline = (jokeId: number) => {
     const newJokes = jokes.reduce<Joke[]>((prev, curr) => {
       if (curr.id === jokeId) {
         curr.showPunchline = true;
@@ -41,66 +41,58 @@ export const Jokes = ({ view = "new_jokes" }: JokesProps) => {
     }, []);
 
     setJokes(newJokes);
-  }
+  };
 
-  function handleSaveInLibrary(jokeId: number): void {
-    setSavedJokes(jokes.filter((joke) => joke.id === jokeId));
-    setJokes(jokes.filter((joke) => joke.id !== jokeId));
-  }
-
-  if (view === "library") {
-    return (
-      <div>
-        <JokesList
-          jokes={savedJokes}
-          handleSaveInLibrary={handleSaveInLibrary}
-          handleShowPunchline={handleShowPunchline}
-        />
-      </div>
-    );
-  }
+  const handleSaveRemoveLibrary = (jokeId: number) => {
+    const newJokes = jokes.map((joke) => {
+      if (joke.id === jokeId) {
+        joke.inLibrary = !joke.inLibrary;
+      }
+      return joke;
+    });
+    setJokes(newJokes);
+  };
 
   return (
     <>
       <div>
-        <JokesList
-          jokes={jokes}
-          handleSaveInLibrary={handleSaveInLibrary}
-          handleShowPunchline={handleShowPunchline}
-        />
+        {jokes
+          .filter((j) => {
+            if (view === "library") {
+              return j.inLibrary;
+            } else {
+              return !j.inLibrary;
+            }
+          })
+          // .filter((joke) => view === "library" ? !!joke.inLibrary : !joke.inLibrary)
+          .map((joke) => (
+            <div
+              style={{ border: "1px solid red", marginBottom: "10px" }}
+              key={joke.id}
+            >
+              <p>{joke.type}</p>
+              <p>{joke.setup}</p>
+              {joke.showPunchline ? (
+                <p>{joke.punchline}</p>
+              ) : (
+                <button onClick={() => handleShowPunchline(joke.id)}>
+                  Show
+                </button>
+              )}
+              {joke.inLibrary ? (
+                <button onClick={() => handleSaveRemoveLibrary(joke.id)}>
+                  remove it from library
+                </button>
+              ) : (
+                <button onClick={() => handleSaveRemoveLibrary(joke.id)}>
+                  save it in library
+                </button>
+              )}
+            </div>
+          ))}
       </div>
-      <button onClick={fetchJokes}>refresh</button>
-    </>
-  );
-};
 
-type JokesListProps = {
-  jokes: Joke[];
-  handleShowPunchline: (jokeId: number) => void;
-  handleSaveInLibrary: (jokeId: number) => void;
-};
-
-const JokesList = (props: JokesListProps) => {
-  const { jokes, handleShowPunchline, handleSaveInLibrary } = props;
-  return (
-    <>
-      {jokes.map((joke) => (
-        <div
-          style={{ border: "1px solid red", marginBottom: "10px" }}
-          key={joke.id}
-        >
-          <p>{joke.type}</p>
-          <p>{joke.setup}</p>
-          {joke.showPunchline ? (
-            <p>{joke.punchline}</p>
-          ) : (
-            <button onClick={() => handleShowPunchline(joke.id)}>Show</button>
-          )}
-          <button onClick={() => handleSaveInLibrary(joke.id)}>
-            save it in library
-          </button>
-        </div>
-      ))}
+      {view === "new_jokes" && <button onClick={fetchJokes}>refresh</button>}
     </>
   );
 };
