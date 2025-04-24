@@ -1,10 +1,10 @@
 import "./App.css";
-import { ReactHookForm } from "./components/ReactHookForm";
+import { Jokes } from "./components/Jokes.tsx";
 
 function App() {
   return (
     <>
-      <ReactHookForm />
+      <Jokes />
     </>
   );
 }
